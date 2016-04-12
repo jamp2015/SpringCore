@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop = "http://www.springframework.org/schema/aop"
+	xmlns:p = "http://www.springframework.org/schema/p"
+	xmlns:c = "http://www.springframework.org/schema/c"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+				 		http://www.springframework.org/schema/beans
+				 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+				 		http://www.springframework.org/schema/util
+						http://www.springframework.org/schema/util/spring-util-3.2.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<import resource = "repository-config.xml" />
+
+	<!-- Use constructor -->
+	<bean id = "itemService" class = "org.shop.api.impl.ItemServiceImpl">
+		<constructor-arg ref = "itemRepository" />
+	</bean>
+	
+	<bean id = "sellerService" class = "org.shop.api.impl.SellerServiceImpl">
+		<property name="repository" ref = "sellerRepository" />
+	</bean>
+	
+	<!-- Use setters -->
+	<bean id = "orderService" class = "org.shop.api.impl.OrderServiceImpl">
+		<property name="orderRepository" ref = "orderRepository" />
+		<property name="itemService" ref = "itemService" />
+	</bean>
+	
+	<bean id = "productService" class = "org.shop.api.impl.ProductServiceImpl">
+		<constructor-arg ref= "productRepository" />
+	</bean>
+	
+	<bean id = "proposalService" class = "org.shop.api.impl.ProposalServiceImpl">
+		<constructor-arg ref= "proposalRepository" />
+		<property name="sellerService" ref = "sellerService" />
+		<property name="productService" ref = "productService" />
+	</bean>
+	
+	<bean id="clientService" class="org.shop.api.impl.UserServiceImpl" p:repository-ref="userRepository"/>
+
+</beans>
